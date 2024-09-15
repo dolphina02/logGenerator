@@ -99,7 +99,7 @@ public class BatchConfig {
     @Bean
     public Step makeWebLogAndProduceStep() {
         return new StepBuilder("makeWebLogAndProduceStep", jobRepository)
-                .<WebLog, WebLog>chunk(10, transactionManager)
+                .<WebLog, WebLog>chunk(100, transactionManager)
                 .reader(webLogReader())
                 .writer(webLogWriter())
                 .build();

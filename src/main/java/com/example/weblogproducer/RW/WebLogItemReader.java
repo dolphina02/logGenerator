@@ -4,15 +4,20 @@ import com.example.weblogproducer.entity.OrderLog;
 import com.example.weblogproducer.entity.WebLog;
 import net.datafaker.Faker;
 import org.springframework.batch.item.ItemReader;
+import java.util.UUID;
+
 
 import java.util.ArrayList;
 import java.util.List;
-
 public class WebLogItemReader implements ItemReader<WebLog> {
 
     private Faker faker = new Faker();
     private int count = 0;
     private static final int MAX_COUNT = 100; // 생성할 최대 아이템 수
+
+    // 자주 접속하는 특정 IP
+    private static final String FREQUENT_IP = "192.168.1.1";  // 특정 IP 주소
+    private static final double FREQUENT_IP_PROBABILITY = 0.7;  // 특정 IP가 생성될 확률 (70%)
 
     @Override
     public WebLog read() throws Exception {
@@ -26,9 +31,17 @@ public class WebLogItemReader implements ItemReader<WebLog> {
 
     public WebLog genNewWebLog() {
         WebLog myWebLog = new WebLog();
-        myWebLog.setIpAddress(faker.internet().ipV4Address());
+
+        // 특정 IP를 70% 확률로 생성하고, 나머지는 랜덤 IP
+        if (Math.random() < FREQUENT_IP_PROBABILITY) {
+            myWebLog.setIpAddress(FREQUENT_IP);  // 특정 IP 설정
+        } else {
+            myWebLog.setIpAddress(faker.internet().ipV4Address());  // 랜덤 IP 설정
+        }
+
         myWebLog.setUrl(faker.internet().url());
-        myWebLog.setTimestamp(faker.date().past(7, java.util.concurrent.TimeUnit.DAYS).toString());
+        myWebLog.setTimestamp(faker.date().past(7, java.util.concurrent.TimeUnit.DAYS));
+        myWebLog.setSessionId(UUID.randomUUID().toString());
 
         return myWebLog;
     }

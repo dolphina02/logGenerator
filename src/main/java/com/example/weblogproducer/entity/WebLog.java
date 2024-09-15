@@ -2,9 +2,13 @@ package com.example.weblogproducer.entity;
 
 import lombok.Data;
 
+import java.util.Date;
+
 @Data
 public class WebLog {
-    public String ipAddress;
-    public String url;
-    public String timestamp;
+    private String ipAddress;
+    private String url;
+    private Date timestamp;
+    private String userId;
+    private String sessionId;
 }

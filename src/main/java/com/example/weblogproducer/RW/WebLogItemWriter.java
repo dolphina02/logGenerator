@@ -17,7 +17,7 @@ public class WebLogItemWriter implements ItemWriter<WebLog> {
     @Override
     public void write(Chunk<? extends WebLog> items) throws Exception {
         for (WebLog webLog : items) {
-            kafkaTemplate.send("weblogs4", webLog);
+            kafkaTemplate.send("source_topic", webLog);
         }
     }
 }
